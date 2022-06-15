@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Names Application</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  </head>
+  <body>
+    <div class="container mt-4">
+      <div class="card">
+        <div class="card-body">
+          <% if (messages.success) { %>
+              <p class="alert alert-success m2-4 mb-2"><%- messages.success %></p>
+          <% } %>  
+ 
+          <h2>NAMES APPLICATION<br>HOSTNAME <%= pod_hostname %></h2>
+ 
+          <form action="contact-us" method="POST">
+            <div class="form-group">
+              <label for="firstName">First Name</label>
+              <input type="text" class="form-control col-lg-9" id="f_name" aria-describedby="emailHelp" placeholder="Enter first name" name="f_name">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
+
+          <div class="table-data" style="margin-top: 20px; border-top: 1px solid black;">
+            <h2>DATA</h2>
+            <table class="table table-striped">
+                <tr>
+                    <th>ID</th>
+                    <th>Full Name</th>
+                    <th>Pod</th>
+                    <th>Date</th>
+                </tr>
+                      
+                <%
+                if(userData.length!=0){
+                var i=1;
+                userData.forEach(function(data){
+                %>
+                <tr>
+                    <td><%=data.id %></td>
+                    <td><%=data.f_name %></td>
+                    <td><%=data.created_by_pod %></td>
+                    <td><%=data.created_at %></td>
+                </tr>
+                <%  i++; }) %>
+                <% } else{ %>
+                    <tr>
+                        <td colspan="4">No Data Found</td>
+                    </tr>
+                <% } %>
+            </table>
+          </div>          
+    </div>
+  </div>
+  </body>
+</html>
