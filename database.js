@@ -11,7 +11,7 @@ conn.connect(function(err) {
   if (err) throw err;
   console.log('Database is connected successfully !');
 
-  conn.query("CREATE DATABASE IF NOT EXISTS mydb;", function (err, result) {
+  conn.query("CREATE DATABASE IF NOT EXISTS " + process.env.DATABASE_NAME + ";", function (err, result) {
     if (err) throw err;
     console.log("Database created");
 
