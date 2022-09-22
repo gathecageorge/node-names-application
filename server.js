@@ -75,6 +75,7 @@ app.use(function(err, req, res, next) {
 });
  
 // port must be set to another port like 3000 because incoming http requests are routed from port 80 to port 8080
+// get port from env
 app.listen(process.env.PORT, function () {
     console.log('Node app is running on port '+process.env.PORT);
 });
