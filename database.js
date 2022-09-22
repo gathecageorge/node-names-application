@@ -11,11 +11,14 @@ conn.connect(function(err) {
   if (err) throw err;
   console.log('Database is connected successfully !');
 
-  conn.query("CREATE DATABASE IF NOT EXISTS " + process.env.DATABASE_NAME + ";", function (err, result) {
+  let cSQL = "CREATE DATABASE IF NOT EXISTS " + process.env.DATABASE_NAME + ";";
+  let uSQL = "USE " + process.env.DATABASE_NAME + ";";
+
+  conn.query(cSQL, function (err, result) {
     if (err) throw err;
     console.log("Database created");
 
-    conn.query("USE mydb;", function (err, result) {
+    conn.query(uSQL, function (err, result) {
       if (err) throw err;
       console.log("Database used");
 
