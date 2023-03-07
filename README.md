@@ -33,4 +33,11 @@ i.e Lets say you have 3 instances of the application, like 3 kubernetes pods wit
     ```bash
     docker-compose up -d
     ```
-2. Open `localhost:PORT_NUMBER` to see the application. By default 3 replicas of the application are started
+2. Open `localhost:PORT_NUMBER` to see the application. By default 3 replicas of the application are started. Nginx reverse proxy is used to load balance requests to the replicas meaning each time you refresh a page, the request can go to any host and thus visualize the host serving the request.
+
+## Running using kubernetes
+1. Use command below. The application will have its own mysql server also started so no configuration needed. Incase you need to point to another mysql server, edit `kubernetes.yml` file accordingly.
+    ```bash
+    kubectl apply -f kubernetes.yml
+    ```
+2. Open `localhost:3001` to see the application. By default 2 replicas of the application are started. Kubernetes service is used to load balance requests to the replicas meaning each time you refresh a page, the request can go to any host and thus visualize the host serving the request.
