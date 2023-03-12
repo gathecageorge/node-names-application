@@ -42,3 +42,5 @@ i.e Lets say you have 3 instances of the application, like 3 kubernetes pods wit
     kubectl apply -f kubernetes.yml
     ```
 2. Open `localhost:30001` to see the application. By default 2 replicas of the application are started. Kubernetes service is used to load balance requests to the replicas meaning each time you refresh a page, the request can go to any host and thus visualize the host serving the request.
+3. Open `localhost:30002` to see adminer for connecting to postgres.
+
