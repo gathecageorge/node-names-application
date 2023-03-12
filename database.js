@@ -6,11 +6,11 @@ let connectionConfig = {
   password: process.env.DATABASE_PASSWORD,
   port: process.env.DATABASE_PORT
 };
+let dbName = (process.env.DATABASE_NAME).toLocaleLowerCase();
 
 const connectionPool = async() => {
   //create database on non production environment
   if (process.env.NODE_ENV !== 'production') { 
-    let dbName = (process.env.DATABASE_NAME).toLocaleLowerCase();
     let conn = new Pool(connectionConfig);
 
     let res = await conn.query(`SELECT datname FROM pg_catalog.pg_database WHERE lower(datname) = lower('${dbName}')`);
