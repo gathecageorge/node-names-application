@@ -19,17 +19,18 @@ i.e Lets say you have 3 instances of the application, like 3 kubernetes pods wit
 3. Copy .env_template to .env `cp .env_template .env`
 4. Edit `.env` as required with application port, database host, username, password, database name
 5. Run `node server.js`
+6. Use dbpostgres.yml file with docker compose to create a database for testing `docker-compose -f dbpostgres.yml up -d`
 6. Open `localhost:APPLICATION_PORT` to see the application
 
 ## Running using docker
 1. Use command below. Replace environment variables as required.
     ```bash
-    docker run --rm -d --add-host=host.docker.internal:host-gateway --name node-app -p 3001:3001 -e DATABASE_PORT=5432 -e APPLICATION_PORT=3001 -e DATABASE_HOST=host.docker.internal -e DATABASE_USER=root -e DATABASE_PASSWORD=root -e DATABASE_NAME=nodeNamesApplication gathecageorge/node-names-application:latest
+    docker run --rm -d --add-host=host.docker.internal:host-gateway --name node-app -p 3001:3001 -e DATABASE_PORT=5432 -e APPLICATION_PORT=3001 -e DATABASE_HOST=host.docker.internal -e DATABASE_USER=postgres -e DATABASE_PASSWORD=example -e DATABASE_NAME=nodeNamesApplication gathecageorge/node-names-application:latest
     ```
 2. Open `localhost:APPLICATION_PORT` to see the application
 
 ## Running using docker compose
-1. Use command below. Replace environment variables as required. If the database server is host machine, use `host.docker.internal` as indicated in env file
+1. Use command below. `DATABASE_HOST` variable wont be used, instead the compose stack will contain adminer, postgresdb, application 3 instances, nginx load balancer.
     ```bash
     docker-compose up -d
     ```
