@@ -1,5 +1,11 @@
 const { Pool } = require('pg');
 
+console.log(`HOST: ${process.env.DATABASE_HOST}`);
+console.log(`USER: ${process.env.DATABASE_USER}`);
+console.log(`PASS: ${process.env.DATABASE_PASSWORD}`);
+console.log(`PORT: ${process.env.DATABASE_PORT}`);
+console.log(`DB: ${process.env.DATABASE_NAME}`);
+
 let dbName = (process.env.DATABASE_NAME).toLocaleLowerCase();
 let connectionConfig = {
   user: process.env.DATABASE_USER,
