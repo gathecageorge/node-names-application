@@ -3,53 +3,50 @@
 apiVersion: v1
 kind: Secret
 metadata:
-    name: mysql-secret
+    name: postgres-secret
 type: Opaque
 data:
-    mysql-root-username: cm9vdA== # root encoded as base64
-    mysql-root-password: cm9vdA== # root encoded as base64
+    postgres-username: cG9zdGdyZXM= # postgres encoded as base64
+    postgres-password: ZXhhbXBsZQ== # example encoded as base64
 
 ---
 # Database URL config map
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: mysql-configmap
+  name: postgres-configmap
 data:
-  database_url: mysql-service
+  database_url: postgres-service
 
 ---
-# MYSQL server
+# postgres server
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mysql-deployment
+  name: postgres-deployment
   labels:
-    app: mysql
+    app: postgres
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: mysql
+      app: postgres
   template:
     metadata:
       labels:
-        app: mysql
+        app: postgres
     spec:
       containers:
-      - name: mysql
-        image: mysql
-        args:
-        - "--default-authentication-plugin=mysql_native_password"
-        - "--datadir=/data/mysql"
+      - name: postgres
+        image: postgres
         ports:
-        - containerPort: 3306
+        - containerPort: 5432
         env:
-        - name: MYSQL_ROOT_PASSWORD
+        - name: POSTGRES_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: mysql-secret
-              key: mysql-root-username
+              name: postgres-secret
+              key: postgres-password
         resources:
           requests:
             memory: "256Mi"
@@ -59,18 +56,18 @@ spec:
             cpu: "1000m"
 
 ---
-# MYSQL service port 3306
+# postgres service port 5432
 apiVersion: v1
 kind: Service
 metadata:
-  name: mysql-service
+  name: postgres-service
 spec:
   selector:
-    app: mysql
+    app: postgres
   ports:
     - protocol: TCP
-      port: 3306
-      targetPort: 3306
+      port: 5432
+      targetPort: 5432
 
 ---
 # Application port 3001
@@ -99,19 +96,19 @@ spec:
         - name: DATABASE_USER
           valueFrom:
             secretKeyRef:
-              name: mysql-secret
-              key: mysql-root-username
+              name: postgres-secret
+              key: postgres-username
         - name: DATABASE_PASSWORD
           valueFrom: 
             secretKeyRef:
-              name: mysql-secret
-              key: mysql-root-password
+              name: postgres-secret
+              key: postgres-password
         - name: DATABASE_HOST
           valueFrom: 
             configMapKeyRef:
-              name: mysql-configmap
+              name: postgres-configmap
               key: database_url
-        - name: PORT
+        - name: APPLICATION_PORT
           value: "3001" 
         resources:
           requests:

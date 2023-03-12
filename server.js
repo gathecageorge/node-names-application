@@ -1,20 +1,24 @@
 if (process.env.NODE_ENV !== 'production') { 
   require('dotenv').config(); 
 }
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var bodyParser = require('body-parser');
-var flash = require('express-flash');
-var session = require('express-session');
-var db=require('./database');
+let createError = require('http-errors');
+let express = require('express');
+let path = require('path');
+let cookieParser = require('cookie-parser');
+let logger = require('morgan');
+let flash = require('express-flash');
+let session = require('express-session');
 
-var os = require("os");
-var pod_hostname = os.hostname();
+const db = require('./database');
+var conn;
+db().then((res) => {
+  conn = res;
+});
 
-var app = express();
+let os = require("os");
+let pod_hostname = os.hostname();
+
+let app = express();
  
 app.use(function(req,res,next){
   global.pod_hostname = pod_hostname;
@@ -42,21 +46,24 @@ app.use(flash());
  
 /* GET home page. */
 app.get('/', function(req, res, next) {
-  var sql='SELECT * FROM contacts ORDER BY id DESC LIMIT 20';
-  db.query(sql, function (err, data, fields) {
-    if (err) throw err;
-    res.render('contact-us', { title: 'Contact-Us', userData: data});
-  });
+  let sql=`SELECT * FROM contacts ORDER BY id DESC LIMIT 20`;
+
+  conn.query(sql, (query_err, query_res) => {
+    if (query_err) throw query_err;
+    
+    res.render('contact-us', { title: 'Contact-Us', userData: query_res.rows});
+  });  
 });
  
 app.post('/contact-us', function(req, res, next) {
-  var f_name = req.body.f_name;
- 
-  var sql = `INSERT INTO contacts (f_name, created_by_pod, created_at) VALUES ("${f_name}", "${pod_hostname}", NOW())`;
-  db.query(sql, function(err, result) {
-    if (err) throw err;
-    console.log('record inserted');
-    req.flash('success', 'Data added successfully!');
+  let f_name = req.body.f_name;
+  let sql = `INSERT INTO contacts (f_name, created_by_pod, created_at) VALUES ($1, $2, NOW())`;
+
+  conn.query(sql, [f_name, pod_hostname], (query_err, query_res) => {
+    if (query_err) throw query_err;
+
+    console.log(`${query_res.rowCount} record(s) inserted`);
+    req.flash(`success`, `Data added successfully!`);
     res.redirect('/');
   });
 });
@@ -77,10 +84,9 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
  
-// port must be set to another port like 3000 because incoming http requests are routed from port 80 to port 8080
-// get port from env
-app.listen(process.env.PORT, function () {
-    console.log('Node app is running on port '+process.env.PORT);
+// expose application on its port
+app.listen(process.env.APPLICATION_PORT, function () {
+    console.log('Node app is running on port '+process.env.APPLICATION_PORT);
 });
  
 module.exports = app;

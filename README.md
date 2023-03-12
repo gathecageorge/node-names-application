@@ -19,24 +19,24 @@ i.e Lets say you have 3 instances of the application, like 3 kubernetes pods wit
 3. Copy .env_template to .env `cp .env_template .env`
 4. Edit `.env` as required with application port, database host, username, password, database name
 5. Run `node server.js`
-6. Open `localhost:PORT_NUMBER` to see the application
+6. Open `localhost:APPLICATION_PORT` to see the application
 
 ## Running using docker
 1. Use command below. Replace environment variables as required.
     ```bash
-    docker run --rm -d --add-host=host.docker.internal:host-gateway --name node-app -p 3001:3001 -e PORT=3001 -e DATABASE_HOST=host.docker.internal -e DATABASE_USER=root -e DATABASE_PASSWORD=root -e DATABASE_NAME=nodeNamesApplication gathecageorge/node-names-application:latest
+    docker run --rm -d --add-host=host.docker.internal:host-gateway --name node-app -p 3001:3001 -e DATABASE_PORT=5432 -e APPLICATION_PORT=3001 -e DATABASE_HOST=host.docker.internal -e DATABASE_USER=root -e DATABASE_PASSWORD=root -e DATABASE_NAME=nodeNamesApplication gathecageorge/node-names-application:latest
     ```
-2. Open `localhost:PORT_NUMBER` to see the application
+2. Open `localhost:APPLICATION_PORT` to see the application
 
 ## Running using docker compose
 1. Use command below. Replace environment variables as required. If the database server is host machine, use `host.docker.internal` as indicated in env file
     ```bash
     docker-compose up -d
     ```
-2. Open `localhost:PORT_NUMBER` to see the application. By default 3 replicas of the application are started. Nginx reverse proxy is used to load balance requests to the replicas meaning each time you refresh a page, the request can go to any host and thus visualize the host serving the request.
+2. Open `localhost:APPLICATION_PORT` to see the application. By default 3 replicas of the application are started. Nginx reverse proxy is used to load balance requests to the replicas meaning each time you refresh a page, the request can go to any host and thus visualize the host serving the request.
 
 ## Running using kubernetes
-1. Use command below. The application will have its own mysql server also started so no configuration needed. Incase you need to point to another mysql server, edit `kubernetes.yml` file accordingly.
+1. Use command below. The application will have its own postgres server also started so no configuration needed. Incase you need to point to another postgres server, edit `kubernetes.yml` file accordingly.
     ```bash
     kubectl apply -f kubernetes.yml
     ```
