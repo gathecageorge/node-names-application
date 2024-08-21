@@ -13,8 +13,7 @@ RUN npm install
 # RUN npm ci --only=production
 
 # Bundle app source
-COPY . .
+COPY views ./views
+COPY js ./js
 
-EXPOSE 3000
-
-CMD [ "node", "server.js" ]
+CMD [ "node", "js/server.js" ]
