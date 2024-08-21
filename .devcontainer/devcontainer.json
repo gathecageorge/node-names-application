@@ -27,6 +27,7 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
+				"swellaby.node-pack"
 			]
 		}
 	},
