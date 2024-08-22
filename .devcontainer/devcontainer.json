@@ -34,6 +34,11 @@
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
 
+	// Mount ssh keys
+	"mounts": [
+		"type=bind,source=${localEnv:HOME}/.ssh,target=/home/node/.ssh,consistency=cached"
+	],
+	
 	// Use 'postCreateCommand' to run commands after the container is created.
 	"postCreateCommand": "sh /usr/local/share/fix-ownership.sh && npm install"
 

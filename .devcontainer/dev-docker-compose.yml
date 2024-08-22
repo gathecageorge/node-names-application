@@ -10,7 +10,7 @@ services:
 
     volumes:
       # User home dir persist
-      - user-home:/home/vscode
+      - user-home:/home/node
 
       # Forwards the local Docker socket to the container.
       - /var/run/docker.sock:/var/run/docker-host.sock 
