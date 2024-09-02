@@ -5,6 +5,8 @@ on:
     branches: ['main']
   pull_request:
     branches: ['main']
+  # Allow trigger manually
+  workflow_dispatch:
 
 jobs:
   docker:
