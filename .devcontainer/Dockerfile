@@ -1,9 +1,7 @@
 FROM node:22
 
 ARG USERNAME=node
-
-# Copy fix permission script
-COPY fix-ownership.sh /usr/local/share/fix-ownership.sh
+ARG WORKSPACE_FOLDER
 
 # Setup tools and update
 RUN apt update \
@@ -26,8 +24,9 @@ RUN \
     && chmod 0440 /etc/sudoers.d/$USERNAME \
     # Set user to use bash instead of sh
     && usermod -s /bin/bash $USERNAME \
-    # Fix ownership script
-    && sed -i "s/USERNAME/$USERNAME/g" /usr/local/share/fix-ownership.sh
+    # Create workspace directory
+    && mkdir -p $WORKSPACE_FOLDER \
+    && chown $USERNAME:$USERNAME $WORKSPACE_FOLDER
 
 # Use user created above
 USER $USERNAME
